@@ -1,6 +1,7 @@
+import PropTypes from 'prop-types'
 import { useState } from 'react'
 
-const BlogForm = ({createBlog}) => {
+const BlogForm = ({ createBlog }) => {
 	const [title, setTitle] = useState('')
 	const [author, setAuthor] = useState('')
 	const [url, setUrl] = useState('')
@@ -27,7 +28,7 @@ const BlogForm = ({createBlog}) => {
 			<form onSubmit={addBlog}>
 				<div>
 					title:
-						<input
+					<input
 						type="text"
 						value={title}
 						name="Title"
@@ -36,7 +37,7 @@ const BlogForm = ({createBlog}) => {
 				</div>
 				<div>
 					author:
-						<input
+					<input
 						type="text"
 						value={author}
 						name="Author"
@@ -45,7 +46,7 @@ const BlogForm = ({createBlog}) => {
 				</div>
 				<div>
 					url:
-						<input
+					<input
 						type="text"
 						value={url}
 						name="Url"
@@ -56,6 +57,10 @@ const BlogForm = ({createBlog}) => {
 			</form>
 		</div>
 	)
+}
+
+BlogForm.PropTypes = {
+	createBlog: PropTypes.func.isRequired
 }
 
 export default BlogForm

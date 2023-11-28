@@ -12,7 +12,7 @@ const App = () => {
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
 	const [user, setUser] = useState(null)
-	const [notification, setNotification] = useState({message: null, type: ''})
+	const [notification, setNotification] = useState({ message: null, type: '' })
 
 	const blogFormRef = useRef()
 
@@ -122,7 +122,7 @@ const App = () => {
 			.update(updatedBlog.id, updatedBlog)
 			.then(returnedBlog => {
 
-				setBlogs(blogs.map(b => b.id !== updatedBlog.id ? b : {...b, likes: returnedBlog.likes}))
+				setBlogs(blogs.map(b => b.id !== updatedBlog.id ? b : { ...b, likes: returnedBlog.likes }))
 			})
 			.catch(error => {
 
@@ -138,7 +138,7 @@ const App = () => {
 					})
 				}, 5000)
 
-				setBlogs(blogs.filter(b => b.id !== id))
+				setBlogs(blogs.filter(b => b.id !== updatedBlog.id))
 			})
 	}
 
