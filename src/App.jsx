@@ -1,20 +1,20 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import Togglable from './components/Togglable'
 
 const App = () => {
-	const [title, setTitle] = useState('')
-	const [author, setAuthor] = useState('')
-	const [url, setUrl] = useState('')
 	const [blogs, setBlogs] = useState([])
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
 	const [user, setUser] = useState(null)
 	const [notification, setNotification] = useState({message: null, type: ''})
+
+	const blogFormRef = useRef()
 
 	useEffect(() => {
 
@@ -78,15 +78,9 @@ const App = () => {
 		setUser(null)
 	}
 
-	const createBlog = (event) => {
+	const createBlog = (newBlog) => {
 
-		event.preventDefault()
-
-		const newBlog = {
-			title: title,
-			author: author,
-			url: url
-		}
+		blogFormRef.current.toggleVisibility()
 
 		blogService
 			.create(newBlog)
@@ -105,9 +99,6 @@ const App = () => {
 				}, 5000)
 
 				setBlogs(blogs.concat(returnedBlog))
-				setTitle('')
-				setAuthor('')
-				setUrl('')
 			})
 			.catch(error => {
 
@@ -125,6 +116,55 @@ const App = () => {
 			})
 	}
 
+	const addLike = (updatedBlog) => {
+
+		blogService
+			.update(updatedBlog.id, updatedBlog)
+			.then(returnedBlog => {
+
+				setBlogs(blogs.map(b => b.id !== updatedBlog.id ? b : {...b, likes: returnedBlog.likes}))
+			})
+			.catch(error => {
+
+				setNotification({
+					message: error.response.data.error,
+					type: 'error'
+				})
+
+				setTimeout(() => {
+					setNotification({
+						message: null,
+						type: ''
+					})
+				}, 5000)
+
+				setBlogs(blogs.filter(b => b.id !== id))
+			})
+	}
+
+	const removeBlog = (id) => {
+
+		blogService
+			.remove(id)
+			.then(() => setBlogs(blogs.filter(b => b.id !== id)))
+			.catch(error => {
+
+				setNotification({
+					message: error.response.data.error,
+					type: 'error'
+				})
+
+				setTimeout(() => {
+					setNotification({
+						message: null,
+						type: ''
+					})
+				}, 5000)
+
+				setBlogs(blogs.filter(b => b.id !== id))
+			})
+	}
+
 	if (user === null)
 		return (
 			<div>
@@ -139,9 +179,13 @@ const App = () => {
 			<h2>blogs</h2>
 			<Notification message={notification.message} type={notification.type} />
 			<p>{user.name} logged in<button onClick={onLogout}>logout</button></p>
-			<BlogForm title={title} author={author} url={url}  createBlog={createBlog} setAuthor={setAuthor} setTitle={setTitle} setUrl={setUrl} />
-			{blogs.map(blog =>
-				<Blog key={blog.id} blog={blog} />
+
+			<Togglable buttonLabel="create new blog" ref={blogFormRef}>
+				<BlogForm createBlog={createBlog} />
+			</Togglable>
+
+			{blogs.toSorted((a, b) => b.likes - a.likes).map(blog =>
+				<Blog key={blog.id} blog={blog} addLikes={addLike} removeBlog={removeBlog} />
 			)}
 		</div>
 	)

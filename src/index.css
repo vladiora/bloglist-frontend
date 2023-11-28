@@ -17,3 +17,35 @@
 	padding: 10px;
 	margin-bottom: 10px;
 }
+
+/* Basic styling for a red button */
+.red-button {
+	background-color: #ff0000; /* Red background color */
+	color: #ffffff; /* White text color */
+	padding: 5px 10px; /* Padding around the button content */
+	border: none; /* No border */
+	border-radius: 5px; /* Rounded corners */
+	cursor: pointer; /* Change cursor to pointer on hover */
+	font-size: 12px; /* Font size */
+}
+
+/* Hover effect */
+.red-button:hover {
+	background-color: #cc0000; /* Darker red on hover */
+}
+
+/* Basic styling for a like button */
+.like-button {
+	background-color: #007bff; /* Blue background color */
+	color: #ffffff; /* White text color */
+	padding: 5px 10px; /* Padding around the button content */
+	border: none; /* No border */
+	border-radius: 4px; /* Rounded corners */
+	cursor: pointer; /* Change cursor to pointer on hover */
+	font-size: 12px; /* Font size */
+}
+
+/* Hover effect */
+.like-button:hover {
+	background-color: #0056b3; /* Darker blue on hover */
+}
