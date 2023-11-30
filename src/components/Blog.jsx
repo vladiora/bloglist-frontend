@@ -27,17 +27,25 @@ const Blog = ({ blog, addLikes, removeBlog }) => {
 			removeBlog(blog.id)
 	}
 
+	const canRemove = JSON.parse(window.localStorage.getItem('loggedBlogAppUser')).name === blog.user.name
+
+	const removeBtn = () => (
+		<div>
+			<button className='red-button' onClick={remove}>remove</button>
+		</div>
+	)
+
 	const additionalInfo = () => (
 		<div>
 			<p>{blog.url}</p>
 			<p>likes {blog.likes} <button className='like-button' onClick={addLike}>like</button> </p>
 			<p>{blog.user.name}</p>
-			<button className='red-button' onClick={remove}>remove</button>
+			{canRemove && removeBtn()}
 		</div>
 	)
 
 	return (
-		<div style={blogStyle}>
+		<div className='blog' style={blogStyle}>
 			{blog.title} {blog.author}
 			<button onClick={toggleVisibility}>{visible ? 'hide' : 'show'}</button>
 			{visible && additionalInfo()}
